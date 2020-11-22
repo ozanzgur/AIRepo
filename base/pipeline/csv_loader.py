@@ -14,6 +14,7 @@ logger = logging.getLogger('pipeline')
 class CSVLoader:
     def __init__(self, **kwargs):
         def_args = dict(
+            target_column = 'target',
             raw_name = 'raw_data.csv',
             data_dir = '',
             train_ratio = 0.75,
@@ -82,17 +83,15 @@ class CSVLoader:
             logger.info(f'Reading RAW dataset: \n{self.raw_path}')
             try:
                 self.data = pd.read_csv(self.raw_path, **self.read_params)
-                self.data['TEXT'] = self.data['TEXT'].values.astype('U')
-                self.data = self.data[self.data['TEXT'].apply(lambda x: len(x) > 100)]
 
                 logger.info(f'Raw dataset slice: {str(self.data.iloc[:3])}')
-                logger.info(f'Number of texts: {self.data.shape[0]}')
+                logger.info(f'Number of examples: {self.data.shape[0]}')
 
                 if self.label_mapping is not None:
                     logger.info(f'Label mapping: \n{self.label_mapping}')
                     logger.info('Mapping labels...')
-                    self.data['TARGET'] = self.data['TARGET'].map(self.label_mapping)
-                logger.info(f'Unique labels: {self.data["TARGET"].unique()}')
+                    self.data[self.target_column] = self.data[self.target_column].map(self.label_mapping)
+                logger.info(f'Unique labels: {self.data[self.target_column].unique()}')
             except FileNotFoundError:
                 logger.error(f'ERROR: Raw dataset {self.raw_path} not found.')
                 return

@@ -19,10 +19,18 @@ class ConfigLoader:
         self.__dict__.update(kwargs)
     
     def replace_var(self, text):
+        """
+        Try to obtain parameter from this class. If it fails,
+        try to get it from config json
+        
+        """
         m = re.search('{(.+?)}', text)
         if m:
             var_name = m.group(1)
-            var_ref = getattr(self, var_name)
+            try:
+                var_ref = getattr(self, var_name)
+            except:
+                var_ref = self.params[var_name]
             
             # If variable is a string, place it "{var1}_afsdv" => "abcd_afsdf"
             # Otherwise, return variable
