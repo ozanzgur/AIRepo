@@ -1,0 +1,43 @@
+{
+    "csv_loader_params":{
+        "raw_name" : "raw_data.csv",
+        "columns" : "{data_columns}",
+        "processed_extension" : ".npz",
+        "shuffle" : true,
+        "label_mapping" : "{label_mapping}",
+        "read_params" : {
+            "sep" : ",",
+            "names" : "{data_columns}",
+            "encoding" : "utf-8"
+        }
+    },
+    "mlp_term_selector_params":{
+        "term_selector_limit": "{term_selector_limit}"
+    },
+    "cv_params":{
+        "word_count_limit" : 9,
+        "ngram_range" : [1,1]
+    },
+    "tfidf_params":{
+        "sklearn_class" : "sklearn.feature_extraction.text.TfidfTransformer",
+        "smooth_idf" : true,
+        "use_idf" : true
+    },
+    "splitter_params":{
+        "train_ratio" : 0.75,
+        "val_ratio" : 0.125
+    },
+    "csv_saver_params":{},
+    
+    "model_params":{
+        "model_type" : "{model_type}",
+        "input_size" : "{term_selector_limit}",
+        "num_search_iterations" : 25,
+        "minimize_metric" : false,
+        "metric" : "categorical_accuracy",
+        "loss" : "categorical_crossentropy"
+    },
+    
+    
+    "data_columns": ["TARGET","TEXT"]
+}

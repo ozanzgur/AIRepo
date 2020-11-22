@@ -1,0 +1,23 @@
+{
+    "Diğer_Müşteri_İşlemleri": 0,
+    "Hesap_İşlemleri": 0,
+    "Döviz_İşlemleri": 0,
+    "Virman": 0,
+
+    "Çek_Erteleme": 1,
+    "Çek_İade": 1,
+
+    "Vergi_ve_SGK_Ödemesi": 2,
+
+    "Diğer_Kredi_İşlemleri": 3,
+    "Kredi_Kullandırım_Talimatı": 3,
+
+    "İhracat_Mal_Mukabili": 4,
+    "Taşıt_Rehni_Fek": 5,
+    "Toplu_Transfer": 6,
+    "Teminat_Mektubu": 7,
+    "YP_Transfer": 8,
+    "Akreditif_İşlemleri": 9,
+    "Havale": 10,
+    "Eft": 11
+}
