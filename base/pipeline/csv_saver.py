@@ -13,7 +13,6 @@ from os.path import join
 logger = logging.getLogger('pipeline')
 
 class CSVSaver:
-    @utils.catch('CSVSAVER_INITERROR')
     def __init__(self, **kwargs):
         def_args = dict(
             data_dir = '',
@@ -29,8 +28,7 @@ class CSVSaver:
         self.train_path = join(self.data_dir, self.train_name) + self.processed_extension
         self.val_path = join(self.data_dir, self.val_name) + self.processed_extension
         self.test_path = join(self.data_dir, self.test_name) + self.processed_extension
-
-    @utils.catch('CSVSAVER_CALLERROR')
+    
     def __call__(self, x, debug = False):
         self.train_data = x.get('train_data')
         self.val_data = x.get('val_data')

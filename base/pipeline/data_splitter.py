@@ -11,7 +11,6 @@ import numpy as np
 logger = logging.getLogger('pipeline')
 
 class DataSplitter:
-    @utils.catch('DATASPLITTER_INITERROR')
     def __init__(self, **kwargs):
         # TODO: Add shuffling in splitter
         def_args = dict(
@@ -22,7 +21,6 @@ class DataSplitter:
         for k, def_val in def_args.items():
             self.__dict__.update({k: kwargs.get(k, def_val)})
                 
-    @utils.catch('DATASPLITTER_CALLERROR')
     def __call__(self, x, debug = False):
         """Split into train, val, test.
         """

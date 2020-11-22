@@ -35,7 +35,6 @@ sklearn_models = ['svm', 'lr', 'nb', 'crf']
 all_models = sklearn_models + ['mlp', 'lgbm']
 
 class MultiModel:
-    @utils.catch('MULTIMODEL_INITERROR')
     def __init__(self, **kwargs):
         def_args = dict(
             model_type = None,
@@ -75,13 +74,11 @@ class MultiModel:
             logger.info('Loading model...')
             self.model.load(**self.model_paths)"""
     
-    @utils.catch('MULTIMODEL_CALLERROR')
     def __call__(self, x, debug = False):
         if debug:
             logger.info(f'Model input: {x}')
         return getattr(self, self.model_method)(x)
     
-    @utils.catch('MULTIMODEL_FITERROR')
     def fit(self, x, debug = False,**kwargs):
         assert(x is not None)
 
@@ -97,7 +94,6 @@ class MultiModel:
         return res
 
     
-    @utils.catch('MULTIMODEL_PREDICTERROR')
     def predict(self, x, debug = False):
         if self.trained_model == False:
             logger.info('Loading model...')
@@ -107,7 +103,6 @@ class MultiModel:
         x.update({'output': self.model.predict(x['output'])})
         return x
 
-    @utils.catch('MULTIMODEL_PREDICTTESTERROR')
     def predict_test_data(self, x, debug = False):
         if self.trained_model == False:
             logger.info('Loading model...')
@@ -118,7 +113,6 @@ class MultiModel:
         })
         return x
 
-    @utils.catch('MULTIMODEL_TESTERROR')
     def test(self, x, debug = False):
         if self.trained_model == False:
             logger.info('Loading model...')
@@ -142,7 +136,6 @@ class MultiModel:
             log_param("model_method", self.model_method)
             log_metric("metric", res['metric'])"""
 
-    @utils.catch('MULTIMODEL_SEARCHERROR')
     def search(self, x, debug = False, **kwargs):
         self.model.search(
             x,
@@ -159,7 +152,6 @@ class MultiModel:
         #self.log_model(res)
         return res
     
-    @utils.catch('MULTIMODEL_FITBESTERROR')
     def fit_best(self, x):
         self.trained_model = True
         return self.model.fit_best(

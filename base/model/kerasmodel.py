@@ -14,7 +14,6 @@ import tensorflow as tf
 logger = logging.getLogger('pipeline')
 
 class BaseKerasModel():
-    @utils.catch('BASEMODEL_INITERROR')
     def __init__(self, **kwargs):
         
         def_args = {
@@ -36,12 +35,10 @@ class BaseKerasModel():
         if self.use_callback_checkpoint:
             self.add_callback_checkpoint()
     
-    @utils.catch('BASEMODEL_SETMODELERROR')
     def set_model(self, model):
         logger.info('Warning: Model already exists, replacing.')
         self.model = model
     
-    @utils.catch('BASEMODEL_FITGENERROR')
     def fit_generator(
             self, x, steps_per_epoch = 1, epochs = 1,
             validation_steps = 1, **kwargs):
@@ -59,11 +56,9 @@ class BaseKerasModel():
         # Create a dict for metric
         return {'val_loss': min(history.history['val_loss'])}
     
-    @utils.catch('BASEMODEL_PREDICTERROR')
     def predict(self, x, **kwargs):
         return self.model.predict(x, **kwargs)
     
-    @utils.catch('MLP_FITERROR')
     def fit(self, x, steps_per_epoch, validation_steps, 
             plot_history = False, **fit_params):
         
@@ -102,7 +97,6 @@ class BaseKerasModel():
         
         return metrics
     
-    @utils.catch('BASEMODEL_EVALUATEERROR')
     def test_generator(self, dataset):
         """Test for pipelines with a data generator.
         
@@ -128,7 +122,6 @@ class BaseKerasModel():
                     verbose=0)
         return metrics
     
-    @utils.catch('MLP_TESTERROR')
     def test(self, test_data):
         """Test for pipelines without a data generator.
         
@@ -162,8 +155,7 @@ class BaseKerasModel():
                                 save_weights_only = True,
                                 save_best_only = True,
                                 period = period))"""
-                                
-    @utils.catch('BASEMODEL_ADDCHECKPOINTERROR')
+    
     def add_callback_checkpoint(self, path = None, monitor = 'val_loss', period = 1):
         if path is None:
             path = "logs//keras_loss-{val_loss:.4f}_ep-{epoch:03d}.h5"
@@ -173,8 +165,7 @@ class BaseKerasModel():
                                 save_weights_only = True,
                                 save_best_only = True,
                                 period = period))
-        
-    @utils.catch('BASEMODEL_ADDREDUCELRERROR')
+    
     def add_callback_reducelr(self, monitor = 'val_loss', factor = 0.2,
                               patience = 5, verbose = 1):
         
@@ -183,8 +174,7 @@ class BaseKerasModel():
                                 factor = factor,
                                 patience = patience,
                                 verbose = verbose))
-        
-    @utils.catch('BASEMODEL_ADDEARLYSTOPPINGERROR')
+    
     def add_callback_earlystopping(self, monitor = 'val_loss', min_delta = 0,
                                    patience = 12, verbose = 1):
         

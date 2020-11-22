@@ -28,8 +28,7 @@ class MLPTermSelector:
             logging.warning('vocabulary.csv could not be found, you must pass "features" dataframe from prev. steps')
 
         
-        
-    @utils.catch('MLPTERMSELECTOR_RUNERROR')
+    
     def __call__(self, x, debug = False):        
         logger.info('Fitting MLP...')
         if 'features' in x:
@@ -64,7 +63,6 @@ class MLPTermSelector:
         x['features'] = self.vocabulary
         return x
     
-    @utils.catch('MLPTERMSELECTOR_LOADVOCABULERYERROR')
     def _load_vocabulary(self):
         try:
             logger.info('Loading vocabulary...')
@@ -73,8 +71,7 @@ class MLPTermSelector:
         except FileNotFoundError:
             logger.info('Vocabulary could not be found.')
             self.vocabulary = None
-            
-    @utils.catch('MLPTERMSELECTOR_SAVEVOCABULARYERROR')
+    
     def _save_vocabulary(self):
         logger.info('Saving vocabulary...')
         self.vocabulary.to_csv(os.path.join(self.data_dir,'vocabulary.csv'), index = False)

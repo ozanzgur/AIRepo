@@ -31,7 +31,6 @@ import logging
 logger = logging.getLogger('pipeline')
 
 class MLP(kerasmodel.BaseKerasModel):
-    @utils.catch('MLP_INITERROR')
     def __init__(self, **kwargs):
         """Create a Keras MLP model. No need for input shape.
         
@@ -74,7 +73,6 @@ class MLP(kerasmodel.BaseKerasModel):
         super().__init__(**self.__dict__)
         self.create_mlp()
 
-    @utils.catch('MLP_CREATEMLPERROR')
     def create_mlp(self):
         logger.info('Creating MLP...')
         logger.info(f'Input size: {self.input_size}')
@@ -125,7 +123,6 @@ class MLP(kerasmodel.BaseKerasModel):
         self.model = model
         logger.info('Model initialized.')
 
-    @utils.catch('MLP_FEATUREIMPORTANCESERROR')
     def feature_importances(
             self, feature_list = None, plot = True, sort = True, 
             limit = 50):
@@ -146,7 +143,6 @@ class MLP(kerasmodel.BaseKerasModel):
         # Return only a number of features
         return importance.iloc[:limit]
 
-    @utils.catch('MLP_FITERROR')
     def fit(self, x, **fit_params):
         X_train = x['train_data'][0]
         y_train = x['train_data'][1]
@@ -185,7 +181,6 @@ class MLP(kerasmodel.BaseKerasModel):
             'metric': np.min(metric_hist) if self.minimize_metric else np.max(metric_hist)
         }
     
-    @utils.catch('MLP_SAVEERROR')
     def save(self, hparams_path = 'mlp_hparams', weights_path = 'mlp_weights.h5'):
         # 1- Save hyperparameters to pickle
         arg_keys = self.def_args.keys()
@@ -200,7 +195,6 @@ class MLP(kerasmodel.BaseKerasModel):
         else:
             logger.info('Successfully saved mlp.')
     
-    @utils.catch('MLP_LOADERROR')
     def load(self, hparams_path = 'mlp_hparams', weights_path = 'mlp_weights.h5'):
         # 1- Read hparams from pickle
         try:
@@ -224,7 +218,6 @@ class MLP(kerasmodel.BaseKerasModel):
         else:
             logger.info('Successfully loaded mlp.')
 
-    @utils.catch('MLP_FITBESTERROR')
     def fit_best(
             self, x, ohe = True,
             trials_path = f'trials_mlp', **fit_params):
@@ -251,7 +244,6 @@ class MLP(kerasmodel.BaseKerasModel):
 
         return self.fit(x, **fit_params)
     
-    @utils.catch('MLP_SEARCHERROR')
     def search(self, x, num_iter = 25, trials_path = 'trials_mlp', fig_save_dir = ''):        
         # Get default hparams
         search_space = model_defaults.model_defaults['mlp']['search_space']

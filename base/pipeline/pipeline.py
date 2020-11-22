@@ -26,7 +26,6 @@ except:
 
 
 class Pipeline:
-    @utils.catch('PIPELINE_INITERROR')
     def __init__(self, definitions_path, param_json_path = None, **kwargs):
         # Get parameters
         self.parameters = importlib.import_module(name = definitions_path)
@@ -46,7 +45,6 @@ class Pipeline:
         
         self.init_flow()
     
-    @utils.catch('PIPELINE_INITFLOWERROR')
     def init_flow(self):
         for step_dict in self.workflows[self.workflow]:
             class_name = step_dict['class_name']
@@ -70,11 +68,9 @@ class Pipeline:
             self.flow.append(new_class)
             self.step_names.append(step_name)
     
-    @utils.catch('PIPELINE_PREDICTERROR')
     def predict(*args, **kwargs):
         self.run(*args, **kwargs)
     
-    @utils.catch('PIPELINE_RUNERROR')
     def run(self, x = None, DocId = '', **kwargs):
 
         if self.workflow == 'train':

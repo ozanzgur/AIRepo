@@ -21,7 +21,6 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
 
 class LGBM:
-    @utils.catch('LGBM_INITERROR')
     def __init__(self, **kwargs):
         def_params = dict(
             models = [],
@@ -67,8 +66,7 @@ class LGBM:
         
         assert(self.objective in ['binary', 'multiclass', 'regression', 'multiclassova'])
         self.feature_importances = None
-        
-    @utils.catch('LGBM_TESTERROR')
+    
     def test(self, test_data):
         X_test = test_data[0]
         y_test = test_data[1]
@@ -77,7 +75,6 @@ class LGBM:
         test_preds = self.predict(X_test)
         return self.get_metric(test_preds, y_test)
     
-    @utils.catch('LGBM_METRICERROR')
     def get_metric(self, y_true, y_pred):
         if self.metric_func is None:
             if self.metric == 'accuracy':
@@ -89,7 +86,6 @@ class LGBM:
         else:
             return self.metric_func(y_true, y_pred)
     
-    @utils.catch('LGBM_PREDICTERROR')
     def predict(self, x, debug = False, **kwargs):
         model_preds = []
         assert(len(self.models) > 0)
@@ -108,7 +104,6 @@ class LGBM:
         # Return results of each prediction
         return preds
     
-    @utils.catch('LGBM_FITERROR')
     def fit(self, x):
         """ X can be pd.Dataframe, np.ndarray or sparse.
         y has to be pd.series
@@ -244,12 +239,10 @@ class LGBM:
             'metric': val_metric
         }
     
-    @utils.catch('LGBM_DISPLAYFEATUREIMPORTANCESERROR')
     def display_feature_importances(self):
         display(self.feature_importances.style.background_gradient(cmap = 'coolwarm'))
         
     
-    @utils.catch('LGBM_EXPLAINSHAPERROR')
     def explain_shap(self, data, features = None, class_names = None, which_class = None):
         X, y = data
         
@@ -266,7 +259,6 @@ class LGBM:
                           feature_names = features,
                           class_names = class_names)
     
-    @utils.catch('LGBM_SEARCHERROR')
     def search(self, x, num_iter = 3, trials_path = 'trials_lgbm', fixed_hparams = None):        
         # Get default hparams
         search_space = model_defaults.model_defaults['lgbm']['search_space']

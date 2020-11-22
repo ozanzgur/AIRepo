@@ -12,7 +12,6 @@ from scipy import sparse
 logger = logging.getLogger('pipeline')
 
 class CSVLoader:
-    @utils.catch('CSVLOADER_INITERROR')
     def __init__(self, **kwargs):
         def_args = dict(
             raw_name = 'raw_data.csv',
@@ -58,7 +57,6 @@ class CSVLoader:
         self.val_path = os.path.join(self.data_dir, self.val_name + self.processed_extension)
         self.test_path = os.path.join(self.data_dir, self.test_name + self.processed_extension)
         
-    @utils.catch('CSVLOADER_CALLERROR')
     def __call__(self, x = None, debug = False):
         if x is None:
             x = {}
@@ -126,8 +124,7 @@ class CSVLoader:
             x['loaded_preprocessed'] = False
 
         return x
-        
-    @utils.catch('CSVLOADER_LOADERROR')
+    
     def _load(self):
         """If datasets are DataFrames, y must be in column 'TARGET'.
         If datasets are sparse, datasets must be (x, y).

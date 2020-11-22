@@ -14,7 +14,6 @@ logger = logging.getLogger('pipeline')
 from scipy import sparse
 
 class BasePreprocessorCSV:
-    @utils.catch('BASEPREPROCESSOR_INITERROR')
     def __init__(self, **kwargs):
         def_args = dict(
             raw_name = 'raw_data.csv',
@@ -99,7 +98,6 @@ class BasePreprocessorCSV:
 
                 #logger.info(f'Determine set example counts.')
     
-    @utils.catch('BASEPREPROCESSOR_GETDATASETSERROR')
     def get_datasets(self):
         return dict(
             train_data = self.train_data,
@@ -107,7 +105,6 @@ class BasePreprocessorCSV:
             test_data = self.test_data
         )
     
-    @utils.catch('BASEPREPROCESSOR_SPLITDATAERROR')
     def split_data(self):
         """Split into train, val, test. Deletes old data to free memory.
         """
@@ -166,7 +163,7 @@ class BasePreprocessorCSV:
         if self.save_sets:
             self.save_datasets()
     
-    @utils.catch('BASEPREPROCESSOR_SAVEDATASETSERROR')
+    
     def save_datasets(self):
         """If datasets are DataFrames, y must be in column 'TARGET'.
         If datasets are sparse, datasets must be (x, y).
@@ -238,7 +235,6 @@ class BasePreprocessorCSV:
         self.input_size = self.train_data[0].shape[1]
         logger.info(f'Saved datasets.')
     
-    @utils.catch('BASEPREPROCESSOR_LOADDATASETSERROR')
     def load_datasets(self):
         """If datasets are DataFrames, y must be in column 'TARGET'.
         If datasets are sparse, datasets must be (x, y).
@@ -297,10 +293,8 @@ class BasePreprocessorCSV:
         logger.info(f'test: {self.n_test}')
     
     # You must override this method (For prod)
-    @utils.catch('BASEPREPROCESSOR_PROCESSERROR')
     def process(self, debug = False, **kwargs):
         raise NotImplementedError()
-        
-    @utils.catch('BASEPREPROCESSOR_SELECTFEATURESERROR')
+    
     def select_features(self, limit = 100):
         raise NotImplementedError()

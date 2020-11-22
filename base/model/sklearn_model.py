@@ -38,7 +38,6 @@ class SklearnModel1:
             model = MultinomialNB(alpha=1.0)
                 
     """
-    @utils.catch('SKELARNMODEL_INITERROR')
     def __init__(self, **hparams):
 
         hparams_copy = hparams.copy()
@@ -48,7 +47,6 @@ class SklearnModel1:
         self.minimize_metric = hparams_copy.pop('minimize_metric', False)
         self.model = model_defaults.model_defaults[self.model_tag]['sklearn_model'](**hparams_copy)
 
-    @utils.catch('SKELARNMODEL_FITERROR')
     def fit(self, x, **fit_hparams):
         logger.info(f'Fitting sklearn model...')
         
@@ -74,14 +72,12 @@ class SklearnModel1:
         logger.info(f"Metric: {metric}")
         return {'metric': metric}
     
-    @utils.catch('SKELARNMODEL_TESTERROR')
     def test(self, x):
         test_data = x['test_data']
 
         test_preds = self.model.predict(test_data[0])
         return self.model.score(test_data[1], test_preds)
 
-    @utils.catch('SKELARNMODEL_PREDICTERROR')
     def predict(self, x, debug = False, **kwargs):
         """if debug:
             logger.info(f'Model input: {x}')
@@ -94,7 +90,6 @@ class SklearnModel1:
         except:
             return self.model.predict(x)
 
-    @utils.catch('SKELARNMODEL_LOADERROR')
     def load(self, model_path = 'pipeline_model.joblib'):
         # Load model
         try:
@@ -102,14 +97,12 @@ class SklearnModel1:
         except FileNotFoundError:
             logger.error(f'Model file {model_path} does not exist.')
 
-    @utils.catch('SKELARNMODEL_SAVEERROR')
     def save(self, model_path = 'pipeline_model.joblib'):
         try:
             joblib.dump(self.model, model_path)
         except Exception as e:
             logger.error(e)
 
-    @utils.catch('SKELARNMODEL_FITBESTERROR')
     def fit_best(self, x, trials_path = f'trials_mlp'):
 
         # Get search space
@@ -131,8 +124,7 @@ class SklearnModel1:
             **params
             )
         return self.fit(x)
-
-    @utils.catch('SKELARNMODEL_SEARCHERROR')
+    
     def search(self, x, num_iter = 25, trials_path = 'trials_sklearn', fig_save_dir = ''):        
         # Get default hparams
         search_space = model_defaults.model_defaults[self.model_tag]['search_space']

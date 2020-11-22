@@ -15,7 +15,6 @@ from sklearn.feature_extraction.text import TfidfTransformer
 logger = logging.getLogger('pipeline')
 
 class SklearnPreprocessor:
-    @utils.catch('SKLEARNPREPROCESSOR_INITERROR')
     def __init__(self, step_name, **kwargs):
         assert('sklearn_class' in kwargs)
         
@@ -41,7 +40,6 @@ class SklearnPreprocessor:
     ############################################################################
     # Default methods
     
-    @utils.catch('SKLEARNPREPROCESSOR_CALLERROR')
     def __call__(self, x, debug = False, **kwargs):
         assert(x is not None)
         if debug:
@@ -49,7 +47,6 @@ class SklearnPreprocessor:
 
         return getattr(self, self.preprocessor_method)(x)
     
-    @utils.catch('SKLEARNPREPROCESSOR_TRANSFORMERROR')
     def transform(self, x, debug = False):
         if self.preprocessor is None:
             self._load() #self.preprocessor = self.sklearn_class(**self.preprocessor_kwargs)
@@ -57,7 +54,6 @@ class SklearnPreprocessor:
         x.update({'output': self.preprocessor.transform(x['output'])})
         return x
 
-    @utils.catch('SKLEARNPREPROCESSOR_FITTRANSFORMERROR')
     def fit_transform(self, x, debug = False):
         self.preprocessor = self.sklearn_class(**self.preprocessor_kwargs)
         
@@ -70,7 +66,6 @@ class SklearnPreprocessor:
         x['data'] = (x_data, y_data)
         return x
 
-    @utils.catch('SKLEARNPREPROCESSOR_SAVEERROR')
     def _save(self):
         if self.preprocessor is not None:
             logger.info(f'Saving {self.step_name}...')
@@ -78,8 +73,7 @@ class SklearnPreprocessor:
                 pickle.dump(self.preprocessor, fp)
         else:
             logger.error(f'{self.step_name} class does not exist.')
-        
-    @utils.catch('SKLEARNPREPROCESSOR_LOADERROR')
+    
     def _load(self):
         try:
             logger.info(f'Loading {self.step_name}...')
